@@ -1,0 +1,26 @@
+---
+title: "r_analysis"
+author: "Nathan Shepherd"
+date: "2/9/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+prices = read.csv("../global_idx_close_price.csv")
+prices = na.omit(prices)
+shape = dim(prices)
+dates = prices[,1]
+symbols = names(prices)[2:shape[2]]
+values = as.matrix(prices)
+colMeans(values)
+```
+```{r}
+stats = read.csv("../global_price_stats.csv")
+stats[2][2:length(stats[2])]
+hist(stats[2,2])
+```
+
