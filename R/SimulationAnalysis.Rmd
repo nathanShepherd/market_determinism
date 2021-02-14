@@ -1,0 +1,160 @@
+---
+title: "SimulationAnalysis"
+author: "Nathan Shepherd"
+date: "2/9/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(ggplot2)
+
+SPidx = read.csv("../joined_dfs/sp500_joined_Closed_prices_interp.csv")
+#unique (unlist (lapply (SPidx, function (x) which (is.na (x)))))
+#X = na.exclude(SPidx)
+
+rows = SPidx[,1]
+dates = SPidx[,2] 
+X = SPidx[,!(names(SPidx) %in% c("X","Date"))]
+
+plot(rows, X[,1])
+plot(rows, X[,2])
+```
+
+```{r}
+dividends = 1 / X
+plot(rows, dividends[,2])
+plot(rows, dividends[,1])
+```
+
+## Simulate 
+
+> The expected return value growth R(t)
+
+```{r}
+prev_day = read.csv("../joined_dfs/rolled/sp500_joined_Closed_prices_roll1.csv")
+rows = SPidx[,1]
+dates = SPidx[,2] 
+prev_day = prev_day[,!(names(prev_day) %in% c("X","Date"))]
+
+# R(t + 1) = [ P(t)+D(t)-P(t-1) ] / P(t-1)
+R = (X + dividends - prev_day) / prev_day
+#write.csv(R, file="sp500_R.csv")
+
+ggplot(R, aes(x = rows, y = R[,1])) + geom_point()
+
+R_desc = read.csv("sp500_R_describe_cols.csv")
+
+R_Sn_means = as.numeric(as.vector(R_desc[2,]))
+ggplot(as.data.frame(R_Sn_means), aes(x = R_Sn_means)) + geom_density(fill = "blue", alpha = 0.25) + ggtitle("Mean of 2000 samples Sn")
+```
+
+
+```{r}
+R_mu = read.csv("sp500_R_rowmean.csv")
+ggplot(R_mu, aes(x = X, y = R_mu[,2])) + geom_point()
+
+ggplot(data.frame(means = R_mu[,2]), aes(x = R_mu[,2])) + geom_density( fill = "green", alpha = 0.25) + ggtitle("Mean of Daily Return for SP500")
+
+R_max = max(R_mu[,2])
+R_min = min(R_mu[,2])
+R_mean = mean(R_mu[,2])
+R_sdev = sd(R_mu[,2])
+```
+## Note: Some statistics for the S&P500 mean of return
+```{r}
+R_desc_rowmean = read.csv("sp500_R_rowmean_describe_cols.csv")
+R_desc_rowmean
+```
+
+
+
+# Simulate w ~ Uniform
+
+```{r}
+unif_means <- replicate(2000, {
+  y = runif(500, min=R_min, max=R_max)
+  mean(y)
+})
+
+# Uniform(min(R(t)), max(R(t))
+ggplot(data.frame(means = unif_means) , aes(x = unif_means)) + geom_density(fill = "blue", alpha = 0.25) + ggtitle("Mean of 2000 samples with w ~ Uniform")
+```
+
+
+
+# Simulate w ~ Normal
+
+```{r}
+norm_means <- replicate(2000, {
+  y = rnorm(500, mean=R_mean, sd=R_sdev)
+  mean(y)
+})
+
+# Normal(mean(R_mu), sigma(R_mu))
+ggplot(data.frame(means = norm_means), aes(x = norm_means)) + geom_density(fill = "blue", alpha = 0.25) + ggtitle("Mean of 2000 samples with w ~ Normal")
+```
+
+
+# Simulate w ~ Poisson
+
+```{r}
+pois_means <- replicate(2000, {
+  y = rpois(500, lambda=R_mean)
+  mean(y)
+})
+
+# Poisson(lambda = mean(R_mu))
+ggplot(data.frame(means = pois_means), aes(x = pois_means)) + geom_density(fill = "blue", alpha = 0.25) + ggtitle("Mean of 2000 samples with w ~ Poisson")
+```
+
+
+# Analysis of E(R(t - h))
+
+```{r}
+exp_return = c(R_mu[,2])
+
+for (i in 2:(length(R_mu[,2]))) {
+  exp_return[i] = R_mu[i,2] + exp_return[i-1]
+}
+plot(exp_return, type='l')
+
+
+sample_Sn = sample(R, 100)
+sample_return = c(sum(sample_Sn[1,], na.rm = TRUE))
+for (i in 2:(length(sample_Sn[,1]))) {
+  alpha = as.numeric(as.vector(sample_Sn[i,]))
+  
+  sample_return[i] = sum(alpha, na.rm = TRUE) + sample_return[i-1]
+}
+plot(sample_return, type='l')
+```
+
+
+# Analysis: 
+- What is the E[R(t)]?
+- What is the distribution of w
+- Use correlation and RSS as cost function
+- Distribute $1 equity into all 506 stock
+- Compare returns over different timescales
+- Generate the optimum parameters of w for E[R(t)]
+- Compare difference in E[R(t)] as equity
+- Compare strategy using "head and Shoulder"
+- Compare strategy using moving average
+
+
+
+
+
+
+
+
+
+
+
+
+
+

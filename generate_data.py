@@ -108,14 +108,50 @@ def histogram_normal(title, X = "matrix.csv"):
     
     #df.describe().to_csv("global_price_stats.csv")
 
+def save_interpolate(filename, describe=True):
+    df = pd.read_csv(filename).interpolate()
+    df.to_csv(filename.split('.')[0] + "_interp.csv")
+
+    if describe:
+        file_desc = df.iloc[:,1:].describe()
+        file_desc.to_csv(filename.split('.')[0] + "_describe_cols.csv")
+        print(file_desc)
+
+def save_rolled_prices(filename, n_days=[1, 7, 30, 365]):
+    df = pd.read_csv(filename).interpolate()
+    df_copy = df
+    root = "joined_dfs/rolled/"
+    location =  root + filename.split("/")[-1]
+
+    for h in n_days:
+        Y = df.values[:,1:]
+        rolled = np.roll(Y, h, axis=0)
+        rolled = rolled[h:,:]
+        
+        ext = f"_roll{h}.csv"
+        df_copy.iloc[h:,1:] = rolled
+        df_copy.to_csv(location.split(".")[0] + ext)
+
+def row_means(filename):
+    R = pd.read_csv(filename)
+    R_mu = np.nanmean(R.values[:,1:], axis = 1)
+    R.iloc[:,0] = R_mu
+    filename = filename.split(".")[0] + "_rowmean.csv"
+    R.iloc[:,0].to_csv(filename)
+
 if __name__ == "__main__":
+    #sp5 = "joined_dfs/sp500_joined_Closed_prices.csv"
+    #save_rolled_prices(sp5)
+
+    #import pdb; pdb.set_trace()
+
+    save_interpolate("R/sp500_R_rowmean.csv")
+    #save_corr("joined_dfs/sp500_joined_Closed_prices.csv")
+    #histogram_normal("Hist. of Normal. Close Prices (SP500)",
+    #                "joined_dfs/Normal_sp500_joined_Closed_prices.csv")
     '''
-    #visualize_data()
-    
+    #visualize_data()    
     histogram_normal("Histogram of Normalized Close Prices (G.idx)",
                     "Normal_global_idx_close.csv")
     '''
-    #save_corr("joined_dfs/sp500_joined_Closed_prices.csv")
-    histogram_normal("Hist. of Normal. Close Prices (SP500)",
-                    "joined_dfs/Normal_sp500_joined_Closed_prices.csv")
     
