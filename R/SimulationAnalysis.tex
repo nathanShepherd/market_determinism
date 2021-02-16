@@ -1,0 +1,359 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+%
+\documentclass[
+]{article}
+\usepackage{lmodern}
+\usepackage{amssymb,amsmath}
+\usepackage{ifxetex,ifluatex}
+\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math}
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{xcolor}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
+\hypersetup{
+  pdftitle={SimulationAnalysis},
+  pdfauthor={Nathan Shepherd},
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+\urlstyle{same} % disable monospaced font for URLs
+\usepackage[margin=1in]{geometry}
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{248,248,248}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{#1}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.77,0.63,0.00}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\BuiltInTok}[1]{#1}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.64,0.00,0.00}{\textbf{#1}}}
+\newcommand{\ExtensionTok}[1]{#1}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ImportTok}[1]{#1}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{#1}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\RegionMarkerTok}[1]{#1}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\usepackage{graphicx,grffile}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+% Set default figure placement to htbp
+\makeatletter
+\def\fps@figure{htbp}
+\makeatother
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+
+\title{SimulationAnalysis}
+\author{Nathan Shepherd}
+\date{2/9/2021}
+
+\begin{document}
+\maketitle
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{library}\NormalTok{(ggplot2)}
+
+\NormalTok{SPidx =}\StringTok{ }\KeywordTok{read.csv}\NormalTok{(}\StringTok{"../joined_dfs/sp500_joined_Closed_prices_interp.csv"}\NormalTok{)}
+\CommentTok{#unique (unlist (lapply (SPidx, function (x) which (is.na (x)))))}
+\CommentTok{#X = na.exclude(SPidx)}
+
+\NormalTok{rows =}\StringTok{ }\NormalTok{SPidx[,}\DecValTok{1}\NormalTok{]}
+\NormalTok{dates =}\StringTok{ }\NormalTok{SPidx[,}\DecValTok{2}\NormalTok{] }
+\NormalTok{X =}\StringTok{ }\NormalTok{SPidx[,}\OperatorTok{!}\NormalTok{(}\KeywordTok{names}\NormalTok{(SPidx) }\OperatorTok{%in%}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{"X"}\NormalTok{,}\StringTok{"Date"}\NormalTok{))]}
+
+\KeywordTok{plot}\NormalTok{(rows, X[,}\DecValTok{1}\NormalTok{])}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{SimulationAnalysis_files/figure-latex/unnamed-chunk-1-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{plot}\NormalTok{(rows, X[,}\DecValTok{2}\NormalTok{])}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{SimulationAnalysis_files/figure-latex/unnamed-chunk-1-2.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{dividends =}\StringTok{ }\DecValTok{1} \OperatorTok{/}\StringTok{ }\NormalTok{X}
+\KeywordTok{plot}\NormalTok{(rows, dividends[,}\DecValTok{2}\NormalTok{])}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{SimulationAnalysis_files/figure-latex/unnamed-chunk-2-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{plot}\NormalTok{(rows, dividends[,}\DecValTok{1}\NormalTok{])}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{SimulationAnalysis_files/figure-latex/unnamed-chunk-2-2.pdf}
+
+\hypertarget{simulate}{%
+\subsection{Simulate}\label{simulate}}
+
+\begin{quote}
+The expected return value growth R(t)
+\end{quote}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{prev_day =}\StringTok{ }\KeywordTok{read.csv}\NormalTok{(}\StringTok{"../joined_dfs/rolled/sp500_joined_Closed_prices_roll1.csv"}\NormalTok{)}
+\NormalTok{rows =}\StringTok{ }\NormalTok{SPidx[,}\DecValTok{1}\NormalTok{]}
+\NormalTok{dates =}\StringTok{ }\NormalTok{SPidx[,}\DecValTok{2}\NormalTok{] }
+\NormalTok{prev_day =}\StringTok{ }\NormalTok{prev_day[,}\OperatorTok{!}\NormalTok{(}\KeywordTok{names}\NormalTok{(prev_day) }\OperatorTok{%in%}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{"X"}\NormalTok{,}\StringTok{"Date"}\NormalTok{))]}
+
+\CommentTok{# R(t + 1) = [ P(t)+D(t)-P(t-1) ] / P(t-1)}
+\NormalTok{R =}\StringTok{ }\NormalTok{(X }\OperatorTok{+}\StringTok{ }\NormalTok{dividends }\OperatorTok{-}\StringTok{ }\NormalTok{prev_day) }\OperatorTok{/}\StringTok{ }\NormalTok{prev_day}
+\CommentTok{#write.csv(R, file="sp500_R.csv")}
+
+\KeywordTok{ggplot}\NormalTok{(R, }\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x =}\NormalTok{ rows, }\DataTypeTok{y =}\NormalTok{ R[,}\DecValTok{1}\NormalTok{])) }\OperatorTok{+}\StringTok{ }\KeywordTok{geom_point}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{SimulationAnalysis_files/figure-latex/unnamed-chunk-3-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{R_desc =}\StringTok{ }\KeywordTok{read.csv}\NormalTok{(}\StringTok{"sp500_R_describe_cols.csv"}\NormalTok{)}
+
+\NormalTok{R_Sn_means =}\StringTok{ }\KeywordTok{as.numeric}\NormalTok{(}\KeywordTok{as.vector}\NormalTok{(R_desc[}\DecValTok{2}\NormalTok{,]))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Warning: NAs introduced by coercion
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{ggplot}\NormalTok{(}\KeywordTok{as.data.frame}\NormalTok{(R_Sn_means), }\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x =}\NormalTok{ R_Sn_means)) }\OperatorTok{+}\StringTok{ }\KeywordTok{geom_density}\NormalTok{(}\DataTypeTok{fill =} \StringTok{"blue"}\NormalTok{, }\DataTypeTok{alpha =} \FloatTok{0.25}\NormalTok{) }\OperatorTok{+}\StringTok{ }\KeywordTok{ggtitle}\NormalTok{(}\StringTok{"Mean of 2000 samples Sn"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Warning: Removed 3 rows containing non-finite values (stat_density).
+\end{verbatim}
+
+\includegraphics{SimulationAnalysis_files/figure-latex/unnamed-chunk-3-2.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{R_mu =}\StringTok{ }\KeywordTok{read.csv}\NormalTok{(}\StringTok{"sp500_R_rowmean.csv"}\NormalTok{)}
+\KeywordTok{ggplot}\NormalTok{(R_mu, }\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x =}\NormalTok{ X, }\DataTypeTok{y =}\NormalTok{ R_mu[,}\DecValTok{2}\NormalTok{])) }\OperatorTok{+}\StringTok{ }\KeywordTok{geom_point}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{SimulationAnalysis_files/figure-latex/unnamed-chunk-4-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{ggplot}\NormalTok{(}\KeywordTok{data.frame}\NormalTok{(}\DataTypeTok{means =}\NormalTok{ R_mu[,}\DecValTok{2}\NormalTok{]), }\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x =}\NormalTok{ R_mu[,}\DecValTok{2}\NormalTok{])) }\OperatorTok{+}\StringTok{ }\KeywordTok{geom_density}\NormalTok{( }\DataTypeTok{fill =} \StringTok{"green"}\NormalTok{, }\DataTypeTok{alpha =} \FloatTok{0.25}\NormalTok{) }\OperatorTok{+}\StringTok{ }\KeywordTok{ggtitle}\NormalTok{(}\StringTok{"Mean of Daily Return for SP500"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{SimulationAnalysis_files/figure-latex/unnamed-chunk-4-2.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{R_max =}\StringTok{ }\KeywordTok{max}\NormalTok{(R_mu[,}\DecValTok{2}\NormalTok{])}
+\NormalTok{R_min =}\StringTok{ }\KeywordTok{min}\NormalTok{(R_mu[,}\DecValTok{2}\NormalTok{])}
+\NormalTok{R_mean =}\StringTok{ }\KeywordTok{mean}\NormalTok{(R_mu[,}\DecValTok{2}\NormalTok{])}
+\NormalTok{R_sdev =}\StringTok{ }\KeywordTok{sd}\NormalTok{(R_mu[,}\DecValTok{2}\NormalTok{])}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{note-some-statistics-for-the-sp500-mean-of-return}{%
+\subsection{Note: Some statistics for the S\&P500 mean of
+return}\label{note-some-statistics-for-the-sp500-mean-of-return}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{R_desc_rowmean =}\StringTok{ }\KeywordTok{read.csv}\NormalTok{(}\StringTok{"sp500_R_rowmean_describe_cols.csv"}\NormalTok{)}
+\NormalTok{R_desc_rowmean}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##       X  Unnamed..0.1
+## 1 count  1.266000e+03
+## 2  mean  1.424428e-03
+## 3   std  1.316037e-02
+## 4   min -1.240879e-01
+## 5   25% -2.526181e-03
+## 6   50%  1.595856e-03
+## 7   75%  6.524765e-03
+## 8   max  1.168095e-01
+\end{verbatim}
+
+\hypertarget{simulate-w-uniform}{%
+\section{Simulate w \textasciitilde{}
+Uniform}\label{simulate-w-uniform}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{unif_means <-}\StringTok{ }\KeywordTok{replicate}\NormalTok{(}\DecValTok{2000}\NormalTok{, \{}
+\NormalTok{  y =}\StringTok{ }\KeywordTok{runif}\NormalTok{(}\DecValTok{500}\NormalTok{, }\DataTypeTok{min=}\NormalTok{R_min, }\DataTypeTok{max=}\NormalTok{R_max)}
+  \KeywordTok{mean}\NormalTok{(y)}
+\NormalTok{\})}
+
+\CommentTok{# Uniform(min(R(t)), max(R(t))}
+\KeywordTok{ggplot}\NormalTok{(}\KeywordTok{data.frame}\NormalTok{(}\DataTypeTok{means =}\NormalTok{ unif_means) , }\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x =}\NormalTok{ unif_means)) }\OperatorTok{+}\StringTok{ }\KeywordTok{geom_density}\NormalTok{(}\DataTypeTok{fill =} \StringTok{"blue"}\NormalTok{, }\DataTypeTok{alpha =} \FloatTok{0.25}\NormalTok{) }\OperatorTok{+}\StringTok{ }\KeywordTok{ggtitle}\NormalTok{(}\StringTok{"Mean of 2000 samples with w ~ Uniform"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{SimulationAnalysis_files/figure-latex/unnamed-chunk-6-1.pdf}
+
+\hypertarget{simulate-w-normal}{%
+\section{Simulate w \textasciitilde{} Normal}\label{simulate-w-normal}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{norm_means <-}\StringTok{ }\KeywordTok{replicate}\NormalTok{(}\DecValTok{2000}\NormalTok{, \{}
+\NormalTok{  y =}\StringTok{ }\KeywordTok{rnorm}\NormalTok{(}\DecValTok{500}\NormalTok{, }\DataTypeTok{mean=}\NormalTok{R_mean, }\DataTypeTok{sd=}\NormalTok{R_sdev)}
+  \KeywordTok{mean}\NormalTok{(y)}
+\NormalTok{\})}
+
+\CommentTok{# Normal(mean(R_mu), sigma(R_mu))}
+\KeywordTok{ggplot}\NormalTok{(}\KeywordTok{data.frame}\NormalTok{(}\DataTypeTok{means =}\NormalTok{ norm_means), }\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x =}\NormalTok{ norm_means)) }\OperatorTok{+}\StringTok{ }\KeywordTok{geom_density}\NormalTok{(}\DataTypeTok{fill =} \StringTok{"blue"}\NormalTok{, }\DataTypeTok{alpha =} \FloatTok{0.25}\NormalTok{) }\OperatorTok{+}\StringTok{ }\KeywordTok{ggtitle}\NormalTok{(}\StringTok{"Mean of 2000 samples with w ~ Normal"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{SimulationAnalysis_files/figure-latex/unnamed-chunk-7-1.pdf}
+
+\hypertarget{simulate-w-poisson}{%
+\section{Simulate w \textasciitilde{}
+Poisson}\label{simulate-w-poisson}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{pois_means <-}\StringTok{ }\KeywordTok{replicate}\NormalTok{(}\DecValTok{2000}\NormalTok{, \{}
+\NormalTok{  y =}\StringTok{ }\KeywordTok{rpois}\NormalTok{(}\DecValTok{500}\NormalTok{, }\DataTypeTok{lambda=}\NormalTok{R_mean)}
+  \KeywordTok{mean}\NormalTok{(y)}
+\NormalTok{\})}
+
+\CommentTok{# Poisson(lambda = mean(R_mu))}
+\KeywordTok{ggplot}\NormalTok{(}\KeywordTok{data.frame}\NormalTok{(}\DataTypeTok{means =}\NormalTok{ pois_means), }\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x =}\NormalTok{ pois_means)) }\OperatorTok{+}\StringTok{ }\KeywordTok{geom_density}\NormalTok{(}\DataTypeTok{fill =} \StringTok{"blue"}\NormalTok{, }\DataTypeTok{alpha =} \FloatTok{0.25}\NormalTok{) }\OperatorTok{+}\StringTok{ }\KeywordTok{ggtitle}\NormalTok{(}\StringTok{"Mean of 2000 samples with w ~ Poisson"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{SimulationAnalysis_files/figure-latex/unnamed-chunk-8-1.pdf}
+
+\hypertarget{analysis-of-ert---h}{%
+\section{Analysis of E(R(t - h))}\label{analysis-of-ert---h}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{exp_return =}\StringTok{ }\KeywordTok{c}\NormalTok{(R_mu[,}\DecValTok{2}\NormalTok{])}
+
+\ControlFlowTok{for}\NormalTok{ (i }\ControlFlowTok{in} \DecValTok{2}\OperatorTok{:}\NormalTok{(}\KeywordTok{length}\NormalTok{(R_mu[,}\DecValTok{2}\NormalTok{]))) \{}
+\NormalTok{  exp_return[i] =}\StringTok{ }\NormalTok{R_mu[i,}\DecValTok{2}\NormalTok{] }\OperatorTok{+}\StringTok{ }\NormalTok{exp_return[i}\DecValTok{-1}\NormalTok{]}
+\NormalTok{\}}
+\KeywordTok{plot}\NormalTok{(exp_return, }\DataTypeTok{type=}\StringTok{'l'}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{SimulationAnalysis_files/figure-latex/unnamed-chunk-9-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{sample_Sn =}\StringTok{ }\KeywordTok{sample}\NormalTok{(R, }\DecValTok{100}\NormalTok{)}
+\NormalTok{sample_return =}\StringTok{ }\KeywordTok{c}\NormalTok{(}\KeywordTok{sum}\NormalTok{(sample_Sn[}\DecValTok{1}\NormalTok{,], }\DataTypeTok{na.rm =} \OtherTok{TRUE}\NormalTok{))}
+\ControlFlowTok{for}\NormalTok{ (i }\ControlFlowTok{in} \DecValTok{2}\OperatorTok{:}\NormalTok{(}\KeywordTok{length}\NormalTok{(sample_Sn[,}\DecValTok{1}\NormalTok{]))) \{}
+\NormalTok{  alpha =}\StringTok{ }\KeywordTok{as.numeric}\NormalTok{(}\KeywordTok{as.vector}\NormalTok{(sample_Sn[i,]))}
+  
+\NormalTok{  sample_return[i] =}\StringTok{ }\KeywordTok{sum}\NormalTok{(alpha, }\DataTypeTok{na.rm =} \OtherTok{TRUE}\NormalTok{) }\OperatorTok{+}\StringTok{ }\NormalTok{sample_return[i}\DecValTok{-1}\NormalTok{]}
+\NormalTok{\}}
+\KeywordTok{plot}\NormalTok{(sample_return, }\DataTypeTok{type=}\StringTok{'l'}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{SimulationAnalysis_files/figure-latex/unnamed-chunk-9-2.pdf}
+
+\hypertarget{analysis}{%
+\section{Analysis:}\label{analysis}}
+
+\begin{itemize}
+\tightlist
+\item
+  What is the E{[}R(t){]}?
+\item
+  What is the distribution of w
+\item
+  Use correlation and RSS as cost function
+\item
+  Distribute \$1 equity into all 506 stock
+\item
+  Compare returns over different timescales
+\item
+  Generate the optimum parameters of w for E{[}R(t){]}
+\item
+  Compare difference in E{[}R(t){]} as equity
+\item
+  Compare strategy using ``head and Shoulder''
+\item
+  Compare strategy using moving average
+\end{itemize}
+
+\end{document}

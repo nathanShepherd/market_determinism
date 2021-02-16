@@ -134,14 +134,137 @@ plot(sample_return, type='l')
 ```
 
 
+
+```{r}
+#growth = function(start, time, Sn) {
+#  sum(start * Sn[time,], na.rm = TRUE)
+#}
+
+#n = length(R[,1])
+#init_inv = 1000 # Dollars
+#inv_per_stock = init_inv / length( R[1,] )
+
+#equity = c(sum(inv_per_stock * R[1,], na.rm = TRUE))
+#for (i in 2:n) {
+#  equity[i] = sum(equity[i-1] * R[i,], na.rm = TRUE)
+#}
+#plot(1:n, equity)
+```
 # Analysis: 
 - What is the E[R(t)]?
-- What is the distribution of w
-- Use correlation and RSS as cost function
-- Distribute $1 equity into all 506 stock
+  Assume the starting investment is worth $1000. 
+  Distribute this equity across SP500 and record terminal worth.
+  Simulate selecting Sn = 10000 and record terminal worth
+- Distribute $1000 equity into portfolio of 490 stocks
 - Compare returns over different timescales
-- Generate the optimum parameters of w for E[R(t)]
+```{r}
+library(ggplot2)
+X = read.csv("exp_equity_n_days_sp500.csv")[,2:5]
+#hist(X[,1])
+
+ggplot(data.frame(means = X[,1]), aes(x = X[,1])) + geom_density(fill = "purple", alpha = 0.25) + ggtitle("Simulated E[R] for Buy and Hold (7 days)")
+
+ggplot(data.frame(means = X[,2]), aes(x = X[,2])) + geom_density(fill = "purple", alpha = 0.25) + ggtitle("Simulated E[R] for Buy and Hold (90 days)")
+
+ggplot(data.frame(means = X[,3]), aes(x = X[,3])) + geom_density(fill = "purple", alpha = 0.25) + ggtitle("Simulated E[R] for Buy and Hold (1 year)")
+
+ggplot(data.frame(means = X[,4]), aes(x = X[,4])) + geom_density(fill = "purple", alpha = 0.25) + ggtitle("Simulated E[R] for Buy and Hold (2 years)")
+```
 - Compare difference in E[R(t)] as equity
+```{r}
+# FROM HW7
+library(boot)
+
+
+sample_means <- replicate(10000, {
+  mean(sample(X[,1], 100))
+})
+
+print("Simulated E[R] for 7 days")
+t.test(sample_means, conf.level = 0.999)$conf.int
+
+diff_means <- function(data, index) {
+  x_mu = mean(data[index,2])
+  y_mu = mean(data[index,1])
+  x_mu - y_mu
+}
+
+print("Simulated difference in mean for 90days vs 7days")
+dm_boot <- boot(X, diff_means, R = 10000)
+(dm_boot_ci <- boot.ci(dm_boot, type = c('basic', 'perc')))
+```
+```{r}
+sample_means <- replicate(10000, {
+  mean(sample(X[,3], 100))
+})
+
+print("Simulated E[R] for 1 year")
+t.test(sample_means, conf.level = 0.999)$conf.int
+
+sample_means <- replicate(10000, {
+  mean(sample(X[,4], 100))
+})
+
+print("Simulated E[R] for 2 years conf interval")
+t.test(sample_means, conf.level = 0.999)$conf.int
+```
+
+
+- What is the distribution of w
+  Use correlation and RSS as cost function
+```{r}
+set.seed(406)
+
+# Estimating 7day expected return given w ~ Normal
+n = length(X[,1])
+Y = X[,1]
+Y_mu = mean(Y)
+Y_sd = sd(Y)
+Y = as.data.frame(Y)
+Y$norm = rnorm(n, Y_mu, Y_sd)
+Y$pois = rpois(n, Y_mu)
+Y$R = sample(R_mu[,2], n, replace = TRUE)
+pairs(Y)
+#x = data[index,]
+#n_row = nrow(x)
+smpl = sample.int(n, size=floor(.8*n), replace=F)
+train = Y[smpl,]
+test = Y[-smpl,]
+  
+norm_model = lm(Y ~ norm + R, data=train)
+summary(norm_model)
+res = mean(predict(norm_model, test)) - mean(test$Y)
+```
+
+
+```{r}
+cv_normal_equity <- function(data, index) {
+  xystar = data[index, ]
+  modstar = lm(Y ~ norm + R, data=data)
+  res = mean(predict(modstar, data[index,]))
+  res - mean(data[index,1])
+}
+
+print("Simulated difference in expected equity given w ~ Normal")
+cv_boot <- boot(Y, cv_normal_equity, R = 10000)
+(cv_boot_ci <- boot.ci(cv_boot, type = c('basic', 'perc')))
+```
+```{r}
+cv_pois_equity <- function(data, index) {
+  xystar = data[index, ]
+  modstar = lm(Y ~ pois + R, data=data)
+  res = mean(predict(modstar, data[index,]))
+  res - mean(data[index,1])
+}
+
+print("Simulated difference in expected equity given w ~ Normal")
+cv_boot <- boot(Y, cv_pois_equity, R = 10000)
+(cv_boot_ci <- boot.ci(cv_boot, type = c('basic', 'perc')))
+```
+
+- What is the distribution of w
+- Generate the optimum parameters of w for E[R(t)]
+
 - Compare strategy using "head and Shoulder"
 - Compare strategy using moving average
 

@@ -139,13 +139,93 @@ def row_means(filename):
     filename = filename.split(".")[0] + "_rowmean.csv"
     R.iloc[:,0].to_csv(filename)
 
+def growth(filename):
+    P = pd.read_csv(filename)
+    start = 1000
+    # Drop missing columns, interpolate missing rows
+    Sn = P.dropna(axis=1).iloc[:,2:].interpolate()
+    Sn.to_csv("R/SP500_clean.csv")
+    Sn = Sn.values
+    #print(Sn.shape)
+    X = Sn
+    per_inv = start / len(Sn[1])
+    print("per_inv:", per_inv)
+    perc_start_price = per_inv / Sn[0]
+    #print(perc_start_price)
+    plt.hist(perc_start_price)
+    plt.title("Perc of starting price for $1000 over 490 stocks")
+    plt.savefig("perc_starting_sp500")
+
+    # growth of $1000 over 5yrs
+    for col in range(len(Sn[0])):
+        X[:, col] = (X[:, col] * perc_start_price[col])    
+    #print(X[-1,:] / X[0,:])
+    plt.hist(X[-1,:] / X[0,:])
+    plt.title("Perc growth of $1000 over 5yrs SP500")
+    plt.savefig("perc_growth_sp500")
+
+    end_sum = {"5years": sum(X[-1])}
+
+    # equity for $1000 over 3 years
+    X = Sn
+    perc_start_price = per_inv / Sn[-(365*3)]
+    for col in range(len(Sn[0])):
+        X[:, col] = (X[:, col] * perc_start_price[col])
+    end_sum["3years"] =  sum(X[-1])
+
+    # equity for $1000 over 2 years
+    X = Sn
+    perc_start_price = per_inv / Sn[-(365*2)]
+    for col in range(len(Sn[0])):
+        X[:, col] = (X[:, col] * perc_start_price[col])
+    end_sum["2year"] =  sum(X[-1])
+
+    # equity for $1000 over 1 year
+    X = Sn
+    perc_start_price = per_inv / Sn[-365]
+    for col in range(len(Sn[0])):
+        X[:, col] = (X[:, col] * perc_start_price[col])
+    end_sum["1year"] = sum(X[-1])
+
+    # equity for $1000 over 3 months
+    X = Sn
+    perc_start_price = per_inv / Sn[-90]
+    for col in range(len(Sn[0])):
+        X[:, col] = (X[:, col] * perc_start_price[col])
+    end_sum["3months"] = sum(X[-1])
+
+    
+    df = pd.DataFrame(end_sum, index=["Hold Duration"])
+    df = df - start
+    print(df)
+    df.plot.bar()
+    plt.title("Excess Return for $1000: Buy and Hold")
+    plt.savefig("sum_bar")
+    #import pdb; pdb.set_trace()
+
+
+    # equity for $1000 over 1 week
+    X = Sn
+    perc_start_price = per_inv / Sn[-90]
+    for col in range(len(Sn[0])):
+        X[:, col] = (X[:, col] * perc_start_price[col])
+    end_sum["3months"] = sum(X[-1])
+
+def simulate():
+    df = pd.DataFrame(end_sum, index=["Hold Duration"])
+    df = df - start
+    print(df)
+    df.plot.bar()
+    plt.title("Excess Return for $1000: Buy and Hold")
+    plt.savefig("sum_bar")
+
 if __name__ == "__main__":
     #sp5 = "joined_dfs/sp500_joined_Closed_prices.csv"
     #save_rolled_prices(sp5)
 
-    #import pdb; pdb.set_trace()
+    growth("joined_dfs/sp500_joined_Closed_prices_interp.csv")
 
-    save_interpolate("R/sp500_R_rowmean.csv")
+    #save_interpolate("R/sp500_R_rowmean.csv")
     #save_corr("joined_dfs/sp500_joined_Closed_prices.csv")
     #histogram_normal("Hist. of Normal. Close Prices (SP500)",
     #                "joined_dfs/Normal_sp500_joined_Closed_prices.csv")
