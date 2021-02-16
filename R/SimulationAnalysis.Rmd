@@ -176,7 +176,7 @@ ggplot(data.frame(means = X[,4]), aes(x = X[,4])) + geom_density(fill = "purple"
 library(boot)
 
 
-sample_means <- replicate(10000, {
+sample_means <- replicate(1000, {
   mean(sample(X[,1], 100))
 })
 
@@ -190,18 +190,18 @@ diff_means <- function(data, index) {
 }
 
 print("Simulated difference in mean for 90days vs 7days")
-dm_boot <- boot(X, diff_means, R = 10000)
+dm_boot <- boot(X, diff_means, R = 1000)
 (dm_boot_ci <- boot.ci(dm_boot, type = c('basic', 'perc')))
 ```
 ```{r}
-sample_means <- replicate(10000, {
+sample_means <- replicate(1000, {
   mean(sample(X[,3], 100))
 })
 
 print("Simulated E[R] for 1 year")
 t.test(sample_means, conf.level = 0.999)$conf.int
 
-sample_means <- replicate(10000, {
+sample_means <- replicate(1000, {
   mean(sample(X[,4], 100))
 })
 
@@ -246,7 +246,7 @@ cv_normal_equity <- function(data, index) {
 }
 
 print("Simulated difference in expected equity given w ~ Normal")
-cv_boot <- boot(Y, cv_normal_equity, R = 10000)
+cv_boot <- boot(Y, cv_normal_equity, R = 1000)
 (cv_boot_ci <- boot.ci(cv_boot, type = c('basic', 'perc')))
 ```
 ```{r}
@@ -258,7 +258,7 @@ cv_pois_equity <- function(data, index) {
 }
 
 print("Simulated difference in expected equity given w ~ Normal")
-cv_boot <- boot(Y, cv_pois_equity, R = 10000)
+cv_boot <- boot(Y, cv_pois_equity, R = 1000)
 (cv_boot_ci <- boot.ci(cv_boot, type = c('basic', 'perc')))
 ```
 
